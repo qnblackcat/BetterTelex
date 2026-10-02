@@ -1,0 +1,9 @@
+Package: com.qn.bettertelex
+Name: BetterTelex
+Version: 0.2.0
+Architecture: iphoneos-arm
+Description: Fix Telex re-composing words (what -> ưhat) after backspacing into them
+Maintainer: Nguyễn Đạt
+Author: Nguyễn Đạt
+Section: Tweaks
+Depends: mobilesubstrate (>= 0.9.5000)
