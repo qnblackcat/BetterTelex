@@ -54,11 +54,24 @@ static NSString *gBTTypingKey;
 // iOS 14 chỉ có internalStringToExternal:, các bản mới hơn có thêm biến thể ignoreCompositionDisabled:.
 static BOOL gBTHasIgnoreVariant;
 
+// iOS 14 (experimental): internalStringToExternal: trả nguyên chuỗi phím khi compositionDisabled bật,
+// nên lúc đó không kiểm tra khứ hồi được. Đọc thẳng ivar m_compositionDisabled để biết; -1 = không đọc được.
+static ptrdiff_t gBTCompositionDisabledOffset = -1;
+
 // Chạy Unikey trên chuỗi phím, bỏ qua compositionDisabled vì decomposeTelex: chỉ được gọi khi đang compose.
 static NSString *BTCompose(TIKeyboardInputManager_vi *im, NSString *internal) {
 	if (gBTHasIgnoreVariant)
 		return [im internalStringToExternal:internal ignoreCompositionDisabled:YES];
 	return [im internalStringToExternal:internal];
+}
+
+// BTCompose có cho ra đúng kết quả Unikey không. Không chắc thì trả NO để tweak không can thiệp.
+static BOOL BTCanCompose(TIKeyboardInputManager_vi *im) {
+	if (gBTHasIgnoreVariant)
+		return YES;
+	if (gBTCompositionDisabledOffset < 0)
+		return NO;
+	return !*(BOOL *)((uint8_t *)(__bridge void *)im + gBTCompositionDisabledOffset);
 }
 
 %hook TIKeyboardInputManager_vi
@@ -73,6 +86,10 @@ static NSString *BTCompose(TIKeyboardInputManager_vi *im, NSString *internal) {
 
 	// Đang chuyển phím vừa bấm, không phải dựng lại từ đã chốt: giữ hành vi gốc.
 	if (gBTTypingKey && [external isEqualToString:gBTTypingKey])
+		return internal;
+
+	// iOS 14: đang compositionDisabled (hoặc không đọc được cờ) thì không kiểm tra được, giữ hành vi gốc.
+	if (!BTCanCompose(self))
 		return internal;
 
 	// Từ tiếng Việt bình thường ("việt" <-> "vieejt") đi khứ hồi đúng: giữ nguyên để vẫn sửa dấu được.
@@ -193,15 +210,25 @@ static NSString *BTCompose(TIKeyboardInputManager_vi *im, NSString *internal) {
 	// Bundle tiếng Việt bình thường chỉ được nạp khi người dùng chuyển sang bàn phím tiếng Việt.
 	// Nạp sẵn để hook ngay; Unikey chỉ khởi tạo khi input manager thật sự được tạo nên gần như không tốn gì.
 	dlopen("/System/Library/TextInput/TextInput_vi.bundle/TextInput_vi", RTLD_NOW);
+	// Cần cả hai method (có từ iOS 14 đến ít nhất 18): thiếu addInput: thì không phân biệt được phím vừa bấm,
+	// sửa decomposeTelex: một mình sẽ gây lỗi "w" -> "ww". Thiếu thì bỏ qua, giữ nguyên bàn phím gốc.
 	Class cls = objc_getClass("TIKeyboardInputManager_vi");
-	if (!cls || !class_getInstanceMethod(cls, @selector(decomposeTelex:))) {
+	if (!cls || !class_getInstanceMethod(cls, @selector(decomposeTelex:))
+		|| !class_getInstanceMethod(cls, @selector(addInput:flags:point:firstDelete:))) {
 		// [debug]
-		// BTLogf(@"không tìm thấy TIKeyboardInputManager_vi hoặc decomposeTelex:, chưa hook (dlerror: %s)", dlerror());
+		// BTLogf(@"không tìm thấy TIKeyboardInputManager_vi, decomposeTelex: hoặc addInput:…, chưa hook (dlerror: %s)", dlerror());
 		// [/debug]
 		return;
 	}
 
 	gBTHasIgnoreVariant = class_getInstanceMethod(cls, @selector(internalStringToExternal:ignoreCompositionDisabled:)) != NULL;
+	if (!gBTHasIgnoreVariant) {
+		// Chỉ tin ivar nếu đúng kiểu BOOL ("B" hoặc "c"), sai kiểu thì để -1: tweak không can thiệp.
+		Ivar ivar = class_getInstanceVariable(cls, "m_compositionDisabled");
+		const char *type = ivar ? ivar_getTypeEncoding(ivar) : NULL;
+		if (type && (strcmp(type, "B") == 0 || strcmp(type, "c") == 0))
+			gBTCompositionDisabledOffset = ivar_getOffset(ivar);
+	}
 	%init;
 
 	// [debug]

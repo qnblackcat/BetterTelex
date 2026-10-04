@@ -15,7 +15,8 @@ Gõ `ww` + `hat` → `what`, bấm dấu cách, xoá dấu cách, gõ thêm `s`:
 
 ## Yêu cầu
 
-- Đã test: iOS 17, jailbreak roothide
+- iOS 15.0 trở lên (đã test: iOS 16, iOS 17 roothide; các bản khác cùng cơ chế nhưng chưa test)
+- iOS 14.x: **experimental**, chưa test trên máy thật. iOS 14 thiếu `internalStringToExternal:ignoreCompositionDisabled:` nên tweak đọc thẳng cờ `m_compositionDisabled` và không can thiệp khi cờ bật hoặc không đọc được, tệ nhất cũng chỉ như bàn phím gốc
 - Bàn phím Tiếng Việt, kiểu gõ Telex (VNI/VIQR không bị lỗi này)
 
 ## Build
@@ -24,7 +25,19 @@ Gõ `ww` + `hat` → `what`, bấm dấu cách, xoá dấu cách, gõ thêm `s`:
 make package FINALPACKAGE=1
 ```
 
-Theos dùng scheme `roothide` (xem `Makefile`). Sau khi cài, khởi động lại `kbd` (`killall -9 kbd`) hoặc respring.
+Mặc định đóng gói cho roothide. Jailbreak khác thì thêm `SCHEME`:
+
+```bash
+make package FINALPACKAGE=1 SCHEME=rootless
+```
+
+```bash
+make package FINALPACKAGE=1 SCHEME=rootful
+```
+
+Sau khi cài, khởi động lại `kbd` (`killall -9 kbd`) hoặc respring.
+
+iOS 12–13 trên máy A12 trở lên không được hỗ trợ: arm64e build bằng Xcode 12+ chỉ chạy từ iOS 14 ([Theos – arm64e deployment](https://theos.dev/docs/arm64e-deployment)).
 
 ## Cách hoạt động
 
