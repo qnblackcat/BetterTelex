@@ -1,0 +1,35 @@
+# Từ bổ sung của BetterTelex: những từ tiếng Việt mà vi-DauMoi.dic / vi-DauCu.dic còn thiếu.
+# Từ có trong file này sẽ không bị trả về phím gốc khi bấm dấu cách, "," hoặc ".".
+# Mỗi dòng một từ (viết hoa hay thường đều được), dòng bắt đầu bằng "#" là chú thích.
+# Thêm từ riêng: sửa file này (vd bằng Filza) rồi respring.
+# File này thuộc BetterTelex, cùng giấy phép GPLv3 với tweak.
+
+# Chính tả cũ với "qu" + i
+quí
+quì
+quỉ
+quĩ
+quị
+
+# Khẩu ngữ, thán từ
+ừm
+ừa
+ừh
+ờm
+ờa
+hứ
+hĩ
+sí
+uầy
+ẹc
+ọẹ
+gòi
+zị
+zậy
+dzậy
+
+# Từ thật hunspell thiếu
+nguệch
+ngoẹo
+quểnh
+gịt

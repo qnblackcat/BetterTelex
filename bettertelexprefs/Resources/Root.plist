@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>title</key>
+	<string>BetterTelex</string>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>✏️ Gõ thử</string>
+			<key>footerText</key>
+			<string>Chạm vào ô trên để mở bàn phím và gõ thử ngay các tuỳ chỉnh bên dưới.</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSEditTextCell</string>
+			<key>placeholder</key>
+			<string>Gõ thử ở đây</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>⚙️ Chung</string>
+			<key>footerText</key>
+			<string>Tất cả các tuỳ chỉnh đều có hiệu lực ngay, không cần respring.</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.qn.bettertelex</string>
+			<key>key</key>
+			<string>Enabled</string>
+			<key>label</key>
+			<string>Bật tweak</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>🔁 Khôi phục từ Tiếng Anh</string>
+			<key>footerText</key>
+			<string>Khi ấn dấu cách, dấu "." hoặc ",", từ không phải tiếng Việt sẽ được khôi phục về đúng các phím đã gõ.
+Ví dụ: "doé" =&gt; "does"; "ắnẻ" =&gt; "answer".</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.qn.bettertelex</string>
+			<key>key</key>
+			<string>RestoreEnabled</string>
+			<key>label</key>
+			<string>Khôi phục từ Tiếng Anh</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>📖 Từ điển cá nhân</string>
+			<key>footerText</key>
+			<string>Các từ trong đây sẽ không bao giờ bị khôi phục bởi "Khôi phục từ Tiếng Anh".</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>detail</key>
+			<string>BTUserWordsController</string>
+			<key>label</key>
+			<string>Từ điển cá nhân</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>⌨️ Telex đơn giản</string>
+			<key>footerText</key>
+			<string>Gõ "w" 1 lần sẽ ra "w" ngay lập tức, thay vì "ư".</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.qn.bettertelex</string>
+			<key>key</key>
+			<string>SimpleTelex</string>
+			<key>label</key>
+			<string>Telex đơn giản</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>💾 Sao lưu</string>
+			<key>footerText</key>
+			<string>Xuất lưu toàn bộ cài đặt, cả từ điển cá nhân, ra một file để sao lưu hoặc chuyển sang máy khác. Nhập thay toàn bộ cài đặt hiện tại bằng một file đã xuất.</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>Xuất cài đặt</string>
+			<key>action</key>
+			<string>exportSettingsTapped:</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>Nhập cài đặt</string>
+			<key>action</key>
+			<string>importSettingsTapped:</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>🐞 Debug</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>detail</key>
+			<string>BTDebugListController</string>
+			<key>label</key>
+			<string>Debug</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>🧩 Tweak khác</string>
+			<key>footerText</key>
+			<string>PerAppKeyboard: chọn bàn phím mặc định cho từng app.
+Ví dụ: mở Zalo là bàn phím Tiếng Việt, mở Safari là Tiếng Anh.
+Dùng cùng BetterTelex để gõ tiếng Việt thoải mái hơn.</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>PerAppKeyboard</string>
+			<key>action</key>
+			<string>openURL:</string>
+			<key>url</key>
+			<string>https://github.com/qnblackcat/PerAppKeyboard</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>💻 Source code</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>BetterTelex</string>
+			<key>action</key>
+			<string>openURL:</string>
+			<key>url</key>
+			<string>https://github.com/qnblackcat/BetterTelex</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>XKey</string>
+			<key>action</key>
+			<string>openURL:</string>
+			<key>url</key>
+			<string>https://github.com/xmannv/xkey</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>🙏 Credits</string>
+			<key>footerText</key>
+			<string>XKey: tham khảo cơ chế khôi phục từ tiếng Anh khi gõ Telex.
+Từ điển âm tiết tiếng Việt hunspell-vi (danh sách gốc của Hồ Ngọc Đức), giấy phép GNU GPLv2.</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>Qn (@qnblackcat)</string>
+			<key>action</key>
+			<string>openURL:</string>
+			<key>url</key>
+			<string>https://github.com/qnblackcat</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>XKey (@xmannv)</string>
+			<key>action</key>
+			<string>openURL:</string>
+			<key>url</key>
+			<string>https://github.com/xmannv/xkey</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>Từ điển hunspell-vi</string>
+			<key>action</key>
+			<string>openURL:</string>
+			<key>url</key>
+			<string>https://github.com/1ec5/hunspell-vi</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>footerText</key>
+			<string>© 2026 Qn (Đạt Nguyễn)</string>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>title</key>
+	<string>Debug</string>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>🐞 Ghi log chẩn đoán</string>
+			<key>footerText</key>
+			<string>Ghi lại hoạt động của BetterTelex (nạp cài đặt, từ đang gõ, quyết định khôi phục), dùng khi báo lỗi.
+Bật công tắc, gõ lại trường hợp bị lỗi, rồi bấm "Chia sẻ file log" để gửi cho tác giả. Log cũng có trong Console.app trên Mac (lọc "BetterTelex").
+Log có chứa chữ bạn gõ, nên tắt và xoá khi không cần.</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.qn.bettertelex</string>
+			<key>key</key>
+			<string>DebugLog</string>
+			<key>label</key>
+			<string>Ghi log chẩn đoán</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>📄 File log</string>
+			<key>footerText</key>
+			<string>File log tối đa khoảng 2MB, phần cũ tự bị xoá dần.</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>Chia sẻ file log</string>
+			<key>action</key>
+			<string>shareLogTapped:</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>Xoá file log</string>
+			<key>action</key>
+			<string>clearLogTapped:</string>
+			<key>confirmation</key>
+			<dict>
+				<key>title</key>
+				<string>Xoá</string>
+				<key>prompt</key>
+				<string>Xoá toàn bộ file log của BetterTelex?</string>
+				<key>cancelTitle</key>
+				<string>Huỷ</string>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>
