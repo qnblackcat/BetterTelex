@@ -126,14 +126,36 @@ Ví dụ: "doé" =&gt; "does"; "ắnẻ" =&gt; "answer".</string>
 			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>🐞 Debug</string>
+			<key>footerText</key>
+			<string>Ghi lại hoạt động của BetterTelex (nạp cài đặt, từ đang gõ, quyết định khôi phục), dùng khi báo lỗi. Bật Debug, gõ lại trường hợp bị lỗi, rồi bấm "Sao chép log" để dán vào báo lỗi. File log tối đa khoảng 2MB, phần cũ tự bị xoá dần. Log có chứa chữ bạn gõ, nên tắt và xoá khi không cần.</string>
 		</dict>
 		<dict>
 			<key>cell</key>
-			<string>PSLinkCell</string>
-			<key>detail</key>
-			<string>BTDebugListController</string>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.qn.bettertelex</string>
+			<key>key</key>
+			<string>DebugLog</string>
 			<key>label</key>
-			<string>Debug</string>
+			<string>Bật debug</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>Sao chép log</string>
+			<key>action</key>
+			<string>copyDebugLog</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>Xoá log</string>
+			<key>action</key>
+			<string>clearDebugLog</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -159,56 +181,35 @@ Dùng cùng BetterTelex để gõ tiếng Việt thoải mái hơn.</string>
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>💻 Source code</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSButtonCell</string>
-			<key>label</key>
-			<string>BetterTelex</string>
-			<key>action</key>
-			<string>openURL:</string>
-			<key>url</key>
-			<string>https://github.com/qnblackcat/BetterTelex</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSButtonCell</string>
-			<key>label</key>
-			<string>XKey</string>
-			<key>action</key>
-			<string>openURL:</string>
-			<key>url</key>
-			<string>https://github.com/xmannv/xkey</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
-			<string>🙏 Credits</string>
+			<string>ℹ️ About</string>
 			<key>footerText</key>
 			<string>XKey: tham khảo cơ chế khôi phục từ tiếng Anh khi gõ Telex.
-Từ điển âm tiết tiếng Việt hunspell-vi (danh sách gốc của Hồ Ngọc Đức), giấy phép GNU GPLv2.</string>
+Từ điển âm tiết tiếng Việt hunspell-vi (danh sách gốc của Hồ Ngọc Đức), giấy phép GNU GPLv2.
+© 2026 Qn (Đạt Nguyễn)</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSTitleValueCell</string>
+			<key>label</key>
+			<string>Phiên bản</string>
+			<key>get</key>
+			<string>tweakVersion:</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSButtonCell</string>
 			<key>label</key>
-			<string>Qn (@qnblackcat)</string>
+			<string>Source code BetterTelex</string>
 			<key>action</key>
-			<string>openURL:</string>
-			<key>url</key>
-			<string>https://github.com/qnblackcat</string>
+			<string>openSourceCode:</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSButtonCell</string>
 			<key>label</key>
-			<string>XKey (@xmannv)</string>
+			<string>Source code XKey</string>
 			<key>action</key>
-			<string>openURL:</string>
-			<key>url</key>
-			<string>https://github.com/xmannv/xkey</string>
+			<string>openXKey:</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -216,15 +217,15 @@ Từ điển âm tiết tiếng Việt hunspell-vi (danh sách gốc của Hồ 
 			<key>label</key>
 			<string>Từ điển hunspell-vi</string>
 			<key>action</key>
-			<string>openURL:</string>
-			<key>url</key>
-			<string>https://github.com/1ec5/hunspell-vi</string>
+			<string>openHunspell:</string>
 		</dict>
 		<dict>
 			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>footerText</key>
-			<string>© 2026 Qn (Đạt Nguyễn)</string>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>Twitter (Đạt)</string>
+			<key>action</key>
+			<string>openTwitter:</string>
 		</dict>
 	</array>
 </dict>

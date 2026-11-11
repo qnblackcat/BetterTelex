@@ -3,12 +3,14 @@ TARGET := iphone:clang:16.5:14.0
 
 include $(THEOS)/makefiles/common.mk
 
+BT_VERSION := $(shell awk '/^Version:/ {print $$2}' ../control)
+
 BUNDLE_NAME = BetterTelexPrefs
-BetterTelexPrefs_FILES = BTPrefsStore.m BTRootListController.m BTUserWordsController.m BTDebugListController.m
+BetterTelexPrefs_FILES = BTPrefsStore.m BTRootListController.m BTUserWordsController.m
 BetterTelexPrefs_INSTALL_PATH = /Library/PreferenceBundles
 BetterTelexPrefs_FRAMEWORKS = UIKit UniformTypeIdentifiers
 BetterTelexPrefs_PRIVATE_FRAMEWORKS = Preferences
-BetterTelexPrefs_CFLAGS = -fobjc-arc
+BetterTelexPrefs_CFLAGS = -fobjc-arc -DBT_VERSION=\"$(BT_VERSION)\"
 
 include $(THEOS_MAKE_PATH)/bundle.mk
 

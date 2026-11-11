@@ -46,7 +46,7 @@ Bật trong **Cài đặt → BetterTelex → Telex đơn giản** (mặc địn
 
 ## Báo lỗi
 
-Bật **Cài đặt → BetterTelex → Debug → Ghi log chẩn đoán** (mặc định tắt), gõ lại trường hợp bị lỗi, rồi bấm **Chia sẻ file log** trong cùng trang để gửi file (lưu vào Tệp, AirDrop, gửi qua tin nhắn…). Log cũng có trong Console.app trên Mac (cắm máy, chọn thiết bị, lọc `BetterTelex`). File log nằm ở `/var/mobile/Library/Preferences/com.qn.bettertelex.log`, tối đa khoảng 2MB. Log có chứa chữ bạn gõ, nên tắt và bấm **Xoá file log** khi không cần.
+Bật **Cài đặt → BetterTelex → Debug → Bật debug** (mặc định tắt), gõ lại trường hợp bị lỗi, rồi bấm **Sao chép log** trong cùng mục để chép log vào clipboard rồi dán vào báo lỗi. Log cũng có trong Console.app trên Mac (cắm máy, chọn thiết bị, lọc `BetterTelex`). File log nằm ở `/var/mobile/Library/Preferences/com.qn.bettertelex.log`, tối đa khoảng 2MB. Log có chứa chữ bạn gõ, nên tắt và bấm **Xoá log** khi không cần.
 
 ## Yêu cầu
 

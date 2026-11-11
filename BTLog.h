@@ -1,4 +1,4 @@
-// Log chẩn đoán: chỉ ghi khi bật Cài đặt → BetterTelex → Debug → Ghi log chẩn đoán (BT_KEY_DEBUG_LOG),
+// Log chẩn đoán: chỉ ghi khi bật Cài đặt → BetterTelex → Debug → Bật debug (BT_KEY_DEBUG_LOG),
 // ra cả os_log (subsystem com.qn.bettertelex) lẫn file BT_LOG_PATH.
 
 #import <Foundation/Foundation.h>

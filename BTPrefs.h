@@ -16,7 +16,7 @@
 #define BT_KEY_RESTORE_ENABLED @"RestoreEnabled"
 // BOOL, mặc định NO: Telex đơn giản, "w" đứng một mình giữ là "w" (muốn "ư" thì gõ "uw").
 #define BT_KEY_SIMPLE_TELEX @"SimpleTelex"
-// BOOL, mặc định NO: ghi log chẩn đoán (trang Debug). Không đi theo file xuất/nhập cài đặt.
+// BOOL, mặc định NO: ghi log chẩn đoán (mục Debug). Không đi theo file xuất/nhập cài đặt.
 #define BT_KEY_DEBUG_LOG @"DebugLog"
 // Mảng NSString: từ điển cá nhân, những từ không bao giờ bị khôi phục. Lưu chữ thường, NFC.
 #define BT_KEY_USER_WORDS @"UserWords"

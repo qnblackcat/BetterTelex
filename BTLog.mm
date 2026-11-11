@@ -14,7 +14,7 @@ static os_log_t BTLog(void) {
 	return log;
 }
 
-// Hàng đợi riêng giữ thứ tự và không chặn bàn phím. Mở-ghi-đóng mỗi dòng nên trang Debug xoá file lúc nào cũng được.
+// Hàng đợi riêng giữ thứ tự và không chặn bàn phím. Mở-ghi-đóng mỗi dòng nên mục Debug xoá file lúc nào cũng được.
 // Kiểm tra lại gBTDebugLog trong hàng đợi: tắt debug thì các dòng còn xếp hàng cũng không được ghi.
 static void BTLogToFile(NSString *message) {
 	static dispatch_queue_t queue;

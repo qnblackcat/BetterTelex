@@ -95,6 +95,17 @@ static BOOL gBTCanRestore;
 	if (!BTCanCompose(self))
 		return internal;
 
+	// Chọn sẵn chữ cũ rồi gõ đè (vd chọn URL trong thanh địa chỉ Safari) làm iOS đồng bộ lại và dựng chuỗi phím
+	// của "ư" thành "uw". Gõ "w" lần nữa ra "uww" -> "uw" thay vì "w". "w" cũng cho "ư" và là phím người dùng thật sự đã bấm.
+	if (external.length == 1 && internal.length == 2) {
+		unichar e = [external characterAtIndex:0];
+		if ((e == 0x01B0 || e == 0x01AF) && [internal caseInsensitiveCompare:@"uw"] == NSOrderedSame) {
+			NSString *key = e == 0x01B0 ? @"w" : @"W";
+			if ([BTCompose(self, key) isEqualToString:external])
+				return key;
+		}
+	}
+
 	// Từ tiếng Việt bình thường ("việt" <-> "vieejt") đi khứ hồi đúng: giữ nguyên để vẫn sửa dấu được.
 	if ([BTCompose(self, internal) isEqualToString:external])
 		return internal;

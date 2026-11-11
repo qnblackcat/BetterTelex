@@ -1,6 +1,6 @@
 Package: com.qn.bettertelex
 Name: BetterTelex
-Version: 1.0.1
+Version: 1.0.2
 Architecture: iphoneos-arm
 Description: Tweak sửa lỗi bộ gõ Telex của bàn phím tiếng Việt mặc định trên iOS: từ đã gõ đúng bị biến đổi khi quay lại sửa (what -> ưhat) & Khôi phục từ không phải tiếng Việt (iOS 15+)
 Maintainer: Qn <qnblackcat@gmail.com>
