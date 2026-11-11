@@ -55,14 +55,25 @@ Bật **Cài đặt → BetterTelex → Debug → Ghi log chẩn đoán** (mặc
 
 ## Build
 
-```bash
+<details>
+<summary>Build instructions</summary>
+
+Build the package with roothide's fork of Theos. 
+
+```sh
 make package FINALPACKAGE=1 SCHEME=rootless   #rootless
 make package FINALPACKAGE=1 SCHEME=roothide   #roothide
 make package FINALPACKAGE=1                   #rootful
 
 ```
+
 iOS 12–13 trên máy A12 trở lên không được hỗ trợ: arm64e build bằng Xcode 12+ chỉ chạy từ iOS 14 ([Theos – arm64e deployment](https://theos.dev/docs/arm64e-deployment))
+
+</details>
 
 ## Xem thêm
 
 - [PerAppKeyboard](https://github.com/qnblackcat/PerAppKeyboard): chọn bàn phím mặc định cho từng app, vd mở Zalo là bàn phím Tiếng Việt, mở Safari là Tiếng Anh.
+
+## Giấy phép
+© 2026 Qn (Đạt Nguyễn). [GNU GPLv3](LICENSE)

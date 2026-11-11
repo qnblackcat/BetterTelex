@@ -1,9 +1,9 @@
 Package: com.qn.bettertelex
 Name: BetterTelex
-Version: 1.0.0
+Version: 1.0.1
 Architecture: iphoneos-arm
-Description: Fix Telex re-composing words (what -> ưhat) after backspacing into them
-Maintainer: Qn
-Author: Qn
+Description: Tweak sửa lỗi bộ gõ Telex của bàn phím tiếng Việt mặc định trên iOS: từ đã gõ đúng bị biến đổi khi quay lại sửa (what -> ưhat) & Khôi phục từ không phải tiếng Việt (iOS 15+)
+Maintainer: Qn <qnblackcat@gmail.com>
+Author: Qn <qnblackcat@gmail.com>
 Section: Tweaks
 Depends: mobilesubstrate (>= 0.9.5000), firmware (>= 14.0), preferenceloader
