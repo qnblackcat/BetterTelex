@@ -71,9 +71,17 @@ static BOOL BTCanCompose(TIKeyboardInputManager_vi *im);
 
 #pragma mark - Khôi phục từ không phải tiếng Việt
 
-// Đã kiểm chứng trên máy iOS 17; RE iOS 16.3 giống hệt. iOS 15 bật thử (chưa RE, chưa test): nếu addInput: ghi đè
-// cờ thì chỉ là không khôi phục. iOS 14 trở xuống hoặc thiếu method thì tắt.
+// Đã kiểm chứng trên máy iOS 17; RE iOS 16.3 giống hệt. iOS 15.0 đã RE nhưng chưa test trên máy: dùng chế độ ivar
+// (gBTRestoreViaIvar). iOS 14 trở xuống hoặc thiếu method thì tắt.
 static BOOL gBTCanRestore;
+
+// iOS 15.0 không có compositionDisabled/setCompositionDisabled: (RE TextInput_vi 19A346), chỉ có ivar m_compositionDisabled,
+// và addInput: ghi đè ivar này ngay đầu hàm (= "đang sửa giữa từ") nên đặt trước %orig không có tác dụng.
+// Chế độ ivar: đặt gBTRestoring trong addInput:, các hàm chuyển đổi chuỗi phím <-> chữ tự ép ivar bật rồi gọi %orig.
+static BOOL gBTRestoreViaIvar;
+static BOOL gBTRestoring;
+static BOOL BTIsCompositionDisabled(TIKeyboardInputManager_vi *im);
+static void BTSetIvarDisabled(TIKeyboardInputManager_vi *im, BOOL disabled);
 
 %hook TIKeyboardInputManager_vi
 
@@ -147,20 +155,31 @@ static BOOL gBTCanRestore;
 
 	// compositionDisabled đã bật nghĩa là đang sửa giữa từ: iOS đã giữ nguyên phím gốc, không đụng vào.
 	BOOL separator = gBTCanRestore && BTIsWordSeparator(input);
-	BOOL restore = separator && ![self compositionDisabled] && BTShouldRestore([self inputString]);
+	BOOL restore = separator && !BTIsCompositionDisabled(self) && BTShouldRestore([self inputString]);
 	if (separator && gBTDebugLog) {
 		NSUInteger dictCount = BTSyllableCount();
 		BTLogf(@"chốt từ bằng '%@': word=%@ disabled=%d dict=%lu -> restore=%d",
-			input, [self inputString], [self compositionDisabled], (unsigned long)dictCount, restore);
+			input, [self inputString], BTIsCompositionDisabled(self), (unsigned long)dictCount, restore);
 	}
-	if (restore)
-		[self setCompositionDisabled:YES];
+	BOOL previousRestoring = gBTRestoring;
+	if (restore) {
+		if (gBTRestoreViaIvar)
+			gBTRestoring = YES;
+		else
+			[self setCompositionDisabled:YES];
+	}
 
 	NSString *result = %orig;
 
-	// iOS chỉ tự tắt cờ sau " ": với "," và "." phải tự tắt để từ sau vẫn ghép dấu được.
-	if (restore && [self compositionDisabled])
-		[self setCompositionDisabled:NO];
+	if (restore) {
+		if (gBTRestoreViaIvar) {
+			gBTRestoring = previousRestoring;
+			BTSetIvarDisabled(self, NO);
+		} else if ([self compositionDisabled]) {
+			// iOS chỉ tự tắt cờ sau " ": với "," và "." phải tự tắt để từ sau vẫn ghép dấu được.
+			[self setCompositionDisabled:NO];
+		}
+	}
 
 	gBTTypingKey = previousKey;
 	return result;
@@ -176,6 +195,16 @@ static BOOL gBTCanRestore;
 
 %end
 
+static BOOL BTIsCompositionDisabled(TIKeyboardInputManager_vi *im) {
+	if (gBTRestoreViaIvar)
+		return MSHookIvar<BOOL>(im, "m_compositionDisabled");
+	return [im compositionDisabled];
+}
+
+static void BTSetIvarDisabled(TIKeyboardInputManager_vi *im, BOOL disabled) {
+	MSHookIvar<BOOL>(im, "m_compositionDisabled") = disabled;
+}
+
 static BOOL BTCanCompose(TIKeyboardInputManager_vi *im) {
 	if (gBTHasIgnoreVariant)
 		return YES;
@@ -184,7 +213,34 @@ static BOOL BTCanCompose(TIKeyboardInputManager_vi *im) {
 	return !MSHookIvar<BOOL>(im, "m_compositionDisabled");
 }
 
-// Hook biến thể ignoreCompositionDisabled: nên chỉ khởi tạo khi method này có (iOS 15+); iOS 14 không có Telex đơn giản.
+// Chế độ ivar (iOS 15.0): trong lúc gBTRestoring, ép ivar bật trước khi iOS chuyển đổi để trả nguyên chuỗi phím.
+%group BTIvarRestore
+%hook TIKeyboardInputManager_vi
+
+- (NSString *)internalStringToExternal:(NSString *)internal {
+	if (gBTRestoring) BTSetIvarDisabled(self, YES);
+	return %orig;
+}
+
+- (NSString *)externalStringToInternal:(NSString *)external {
+	if (gBTRestoring) BTSetIvarDisabled(self, YES);
+	return %orig;
+}
+
+- (unsigned int)internalIndexToExternal:(unsigned int)index {
+	if (gBTRestoring) BTSetIvarDisabled(self, YES);
+	return %orig;
+}
+
+- (unsigned int)externalIndexToInternal:(unsigned int)index {
+	if (gBTRestoring) BTSetIvarDisabled(self, YES);
+	return %orig;
+}
+
+%end
+%end
+
+// Hook biến thể ignoreCompositionDisabled: nên chỉ khởi tạo khi method này có (iOS 16+); iOS 14/15.0 không có Telex đơn giản.
 // Biến thể không có ignore trên iOS 15+ cũng gọi qua đây. Khi compositionDisabled đang bật (iOS cần chuỗi phím gốc,
 // vd lúc khôi phục) thì không được sửa.
 %group BTSimpleTelex
@@ -219,17 +275,21 @@ static BOOL BTCanCompose(TIKeyboardInputManager_vi *im) {
 	}
 
 	gBTHasIgnoreVariant = class_getInstanceMethod(cls, @selector(internalStringToExternal:ignoreCompositionDisabled:)) != NULL;
-	if (!gBTHasIgnoreVariant) {
-		// MSHookIvar không báo lỗi khi thiếu ivar nên kiểm tra trước; chỉ tin ivar đúng kiểu BOOL ("B" hoặc "c").
-		Ivar ivar = class_getInstanceVariable(cls, "m_compositionDisabled");
-		const char *type = ivar ? ivar_getTypeEncoding(ivar) : NULL;
-		gBTHasCompositionIvar = type && (strcmp(type, "B") == 0 || strcmp(type, "c") == 0);
-	}
+	// MSHookIvar không báo lỗi khi thiếu ivar nên kiểm tra trước; chỉ tin ivar đúng kiểu BOOL ("B" hoặc "c").
+	Ivar ivar = class_getInstanceVariable(cls, "m_compositionDisabled");
+	const char *type = ivar ? ivar_getTypeEncoding(ivar) : NULL;
+	BOOL ivarOK = type && (strcmp(type, "B") == 0 || strcmp(type, "c") == 0);
+	gBTHasCompositionIvar = !gBTHasIgnoreVariant && ivarOK;
 
 	BOOL hasCompositionFlag = class_getInstanceMethod(cls, @selector(compositionDisabled))
 		&& class_getInstanceMethod(cls, @selector(setCompositionDisabled:));
+	BOOL hasConvert = class_getInstanceMethod(cls, @selector(internalStringToExternal:))
+		&& class_getInstanceMethod(cls, @selector(externalStringToInternal:))
+		&& class_getInstanceMethod(cls, @selector(internalIndexToExternal:))
+		&& class_getInstanceMethod(cls, @selector(externalIndexToInternal:));
+	gBTRestoreViaIvar = !hasCompositionFlag && ivarOK && hasConvert;
 	if (@available(iOS 15.0, *))
-		gBTCanRestore = hasCompositionFlag && class_getInstanceMethod(cls, @selector(inputString));
+		gBTCanRestore = (hasCompositionFlag || gBTRestoreViaIvar) && class_getInstanceMethod(cls, @selector(inputString));
 	BOOL canSimpleTelex = gBTHasIgnoreVariant && hasCompositionFlag
 		&& class_getInstanceMethod(cls, @selector(vietnameseType));
 
@@ -244,6 +304,8 @@ static BOOL BTCanCompose(TIKeyboardInputManager_vi *im) {
 	%init;
 	if (canSimpleTelex)
 		%init(BTSimpleTelex);
+	if (gBTCanRestore && gBTRestoreViaIvar)
+		%init(BTIvarRestore);
 
-	BTLogf(@"hooks installed (canRestore=%d, canSimpleTelex=%d)", gBTCanRestore, canSimpleTelex);
+	BTLogf(@"hooks installed (canRestore=%d, restoreViaIvar=%d, canSimpleTelex=%d)", gBTCanRestore, gBTRestoreViaIvar, canSimpleTelex);
 }
